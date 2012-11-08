@@ -3,8 +3,8 @@ class RandomnSort{
 		int length=100;
 		int randint[]=new int[length];
 		for(int i=0;i<length;i++)randint[i]=(int)(Math.random()*90000)+10000;
-		for(int i=0;i<length+1;i++)
-			for(int j=0;j<i;j++)
+		for(int i=0;i<length;i++)
+			for(int j=0;j<=i;j++)
 				if(randint[i]>randint[j])
 				{
 					int t=randint[i];
