@@ -1,0 +1,116 @@
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import static java.awt.BorderLayout.*;
+
+public class TextStyle extends JFrame implements ActionListener, ItemListener {
+
+	JPanel jp1 = new JPanel();
+	String[] fontName;
+	String[] colorName = { "黑色", "红色","蓝色", "绿色" };
+	Color[] colors = { Color.BLACK,Color.RED, Color.BLUE, Color.GREEN };
+	JComboBox combobox1, combobox2;
+	JCheckBox checkbox1, checkbox2;
+	JTextArea jta = new JTextArea();
+	JTextField textfield;
+
+	@Override
+	public void itemStateChanged(ItemEvent arg0) {
+		if (arg0.getSource() == combobox1) {
+			String name = (String) combobox1.getSelectedItem();
+
+			Font f = new Font(name, getstyle(), Integer.parseInt(textfield
+					.getText()));
+			jta.setFont(f);
+		}
+		if (arg0.getSource() == combobox2) {
+			int t = combobox2.getSelectedIndex();
+			jta.setForeground(colors[t]);
+
+		}
+		if (arg0.getSource() == checkbox1 || arg0.getSource() == checkbox2) {
+			Font f = new Font(jta.getFont().getFontName(), getstyle(),
+					Integer.parseInt(textfield.getText()));
+			jta.setFont(f);
+		}
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		Font f = new Font(jta.getFont().getFontName(), getstyle(),
+				Integer.parseInt(textfield.getText()));
+		jta.setFont(f);
+
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new TextStyle();
+	}
+
+	public TextStyle() {
+		GraphicsEnvironment ge = GraphicsEnvironment
+				.getLocalGraphicsEnvironment();
+		fontName = ge.getAvailableFontFamilyNames();
+		jp1.setLayout(new FlowLayout(FlowLayout.LEFT));
+		jp1.setBackground(Color.BLUE);
+
+		combobox1 = new JComboBox(fontName);
+		combobox1.addItemListener(this);
+
+		combobox2 = new JComboBox(colorName);
+		combobox2.addItemListener(this);
+
+		checkbox1 = new JCheckBox("粗体");
+		checkbox1.addItemListener(this);
+
+		checkbox2 = new JCheckBox("斜体");
+		checkbox2.addItemListener(this);
+
+		textfield = new JTextField(3);
+		textfield.setText("20");
+		textfield.addActionListener(this);
+
+		jp1.add(new JLabel("字体"));
+		jp1.add(combobox1);
+		jp1.add(new JLabel("字号"));
+		jp1.add(textfield);
+		jp1.add(checkbox1);
+		jp1.add(checkbox2);
+		jp1.add(combobox2);
+		add(jp1, NORTH);
+
+		add(jta, CENTER);
+		this.setTitle("文字风格");
+		this.setSize(600, 200);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	int getstyle() {
+		int x = 0;
+		if (checkbox1.isSelected())
+			x += Font.BOLD;
+		else
+			x += Font.PLAIN;
+		if (checkbox2.isSelected())
+			x += Font.ITALIC;
+		return x;
+	}
+}

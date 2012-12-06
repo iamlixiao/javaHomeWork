@@ -1,0 +1,223 @@
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+class MyDialog extends JDialog implements ActionListener {
+	Box base = Box.createVerticalBox(), h1 = Box.createHorizontalBox(),
+			h2 = Box.createHorizontalBox(), h3 = Box.createHorizontalBox();
+	JTextField searchfor = new JTextField(10);
+	JTextField replacewith = new JTextField(10);
+	JButton doreplace = new JButton("替换");
+	JButton doreplaceall = new JButton("全部替换");
+	String s1, s2;
+	JTextArea text;
+
+	MyDialog(JFrame o, String m, boolean b, JTextArea f) {
+		super(o, m, b);
+		setBounds(400, 300, 230, 130);
+		h1.add(new JLabel("查找:"));
+		h1.add(searchfor);
+		h2.add(new JLabel("替换为:"));
+		h2.add(replacewith);
+		h3.add(doreplace);
+		h3.add(doreplaceall);
+		doreplace.addActionListener(this);
+		doreplaceall.addActionListener(this);
+		text = f;
+		base.add(Box.createVerticalStrut(10));
+		base.add(h1);
+		base.add(Box.createVerticalStrut(10));
+		base.add(h2);
+		base.add(Box.createVerticalStrut(10));
+		base.add(h3);
+		base.add(Box.createVerticalStrut(10));
+		add(base);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		s1 = searchfor.getText();
+		s2 = replacewith.getText();
+		String c;
+		Object thesource = arg0.getSource();
+		if (thesource == doreplace) {
+			c = text.getText().replaceFirst(s1, s2);
+			text.setText(c);
+		} else if (thesource == doreplaceall) {
+			c = text.getText().replaceAll(s1, s2);
+			text.setText(c);
+			searchfor.setText("");
+			replacewith.setText("");
+		}
+	}
+}
+
+class MyNotepad extends JFrame implements ActionListener, KeyListener {
+	JMenuBar menubar = new JMenuBar();
+	JMenu filemenu = new JMenu("文件");
+	JMenu editmenu = new JMenu("编辑");
+	JMenuItem newfile = new JMenuItem("新建（Ctrl+N）");
+	JMenuItem openfile = new JMenuItem("打开（Ctrl+O）");
+	JMenuItem savefile = new JMenuItem("保存（Ctrl+S）");
+	JMenuItem doexit = new JMenuItem("退出");
+	JMenuItem docut = new JMenuItem("剪切（Ctrl+X）");
+	JMenuItem docopy = new JMenuItem("复制（Ctrl+C）");
+	JMenuItem dopaste = new JMenuItem("粘贴（Ctrl+V）");
+	JMenuItem dodelete = new JMenuItem("删除（Del）");
+	JMenuItem dosall = new JMenuItem("全选（Ctrl+A）");
+	JMenuItem dofind = new JMenuItem("查找（Ctrl+F）");
+	JMenuItem doreplace = new JMenuItem("替换（Ctrl+H）");
+	JMenuItem togglewrap = new JMenuItem("自动换行");
+	JTextArea text = new JTextArea();
+
+	public MyNotepad() {
+		menubar.add(filemenu);
+		menubar.add(editmenu);
+		this.setJMenuBar(menubar);
+		filemenu.add(newfile);
+		filemenu.add(openfile);
+		filemenu.add(savefile);
+		filemenu.add(doexit);
+		editmenu.add(docut);
+		editmenu.add(docopy);
+		editmenu.add(dopaste);
+		editmenu.add(dodelete);
+		editmenu.add(dofind);
+		editmenu.add(doreplace);
+		editmenu.add(dosall);
+		editmenu.add(togglewrap);
+		text.setVisible(true);
+		JScrollPane textpane = new JScrollPane(text);
+		this.add(textpane);
+		text.addKeyListener(this);
+		newfile.addActionListener(this);
+		openfile.addActionListener(this);
+		savefile.addActionListener(this);
+		doexit.addActionListener(this);
+		docopy.addActionListener(this);
+		dopaste.addActionListener(this);
+		docut.addActionListener(this);
+		dodelete.addActionListener(this);
+		dofind.addActionListener(this);
+		doreplace.addActionListener(this);
+		dosall.addActionListener(this);
+		togglewrap.addActionListener(this);
+		this.setTitle("记事本");
+		setBounds(
+				(int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - 400,
+				(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - 300,
+				800, 600);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		int m = arg0.getKeyCode();
+		if (arg0.getModifiers() == InputEvent.CTRL_MASK) {
+			if (m == KeyEvent.VK_F)
+				popfind();
+			else if (m == KeyEvent.VK_H) {
+				MyDialog dialog = new MyDialog(this, "替换", false, text);
+				dialog.setVisible(true);
+			} else if (m == KeyEvent.VK_N) {
+				text.setText("");
+			} else if (m == KeyEvent.VK_O) {
+				JFileChooser c = new JFileChooser();
+				c.showOpenDialog(this);
+			} else if (m == KeyEvent.VK_S) {
+				JFileChooser c = new JFileChooser();
+				c.showSaveDialog(this);
+			}
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		Object thesource = arg0.getSource();
+		if (thesource == newfile) {
+			text.setText("");
+		} else if (thesource == openfile) {
+			JFileChooser c = new JFileChooser();
+			c.showOpenDialog(this);
+		} else if (thesource == savefile) {
+			JFileChooser c = new JFileChooser();
+			c.showSaveDialog(this);
+		} else if (thesource == doexit) {
+			System.exit(0);
+		} else if (thesource == docopy) {
+			text.copy();
+		} else if (thesource == docut) {
+			text.cut();
+		} else if (thesource == dopaste) {
+			text.paste();
+		} else if (thesource == dodelete) {
+			int s = text.getSelectionStart(), t = text.getSelectionEnd();
+			String str = text.getText().substring(0, s)
+					+ text.getText().substring(t);
+			text.setText(str);
+			text.setCaretPosition(s);
+		} else if (thesource == dofind) {
+			popfind();
+		} else if (thesource == doreplace) {
+			MyDialog dialog = new MyDialog(this, "替换", false, text);
+			dialog.setVisible(true);
+		} else if (thesource == dosall) {
+			text.selectAll();
+		} else if (thesource == togglewrap) {
+			if (text.getLineWrap()) {
+				text.setLineWrap(false);
+				togglewrap.setText("自动换行");
+			} else {
+				text.setLineWrap(true);
+				togglewrap.setText("不自动换行");
+			}
+		}
+	}
+
+	void popfind() {
+		JOptionPane option = new JOptionPane();
+		option.setVisible(true);
+		String s = JOptionPane.showInputDialog(this, "查找", "查找：",
+				JOptionPane.QUESTION_MESSAGE);
+		if (s != null) {
+			int pos = text.getText().indexOf(s, text.getCaretPosition());
+			if (pos > -1) {
+				text.setSelectionStart(pos);
+				text.setSelectionEnd(pos + s.length());
+			}
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new MyNotepad();
+	}
+}

@@ -1,0 +1,108 @@
+import java.awt.CardLayout;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+class Ex02_5 extends JFrame implements ActionListener {
+	JMenuBar mainmenubar = new JMenuBar();
+	JMenu mainmenu = new JMenu("计算");
+	JMenuItem ch1 = new JMenuItem("计算圆的面积"), ch2 = new JMenuItem("计算三角形面积"),
+			ch3 = new JMenuItem("退出");
+	JPanel mainpanel = new JPanel(), cyclepanel = new JPanel(),
+			trianglepanel = new JPanel();
+	JTextField radius = new JTextField(3), ousize = new JTextField(20),
+			edge1 = new JTextField(3), edge2 = new JTextField(3),
+			edge3 = new JTextField(3), trianglesize = new JTextField(20);
+	JButton calc = new JButton("计算"), calt = new JButton("计算");
+	Box h1=Box.createHorizontalBox(),h2=Box.createHorizontalBox();
+	CardLayout card = new CardLayout();
+
+	public Ex02_5() {
+		ch1.addActionListener(this);
+		ch2.addActionListener(this);
+		ch3.addActionListener(this);
+		mainmenu.add(ch1);
+		mainmenu.add(ch2);
+		mainmenu.add(ch3);
+		mainmenubar.add(mainmenu);
+		this.setJMenuBar(mainmenubar);
+		mainpanel.setLayout(card);
+		cyclepanel.add(new JLabel("输入半径"));
+		cyclepanel.add(radius);
+		cyclepanel.add(new JLabel("圆面积"));
+		cyclepanel.add(ousize);
+		calc.addActionListener(this);
+		cyclepanel.add(calc);
+		h1.add(new JLabel("边1"));
+		h1.add(edge1);
+		h1.add(new JLabel("边2"));
+		h1.add(edge2);
+		h1.add(new JLabel("边3"));
+		h1.add(edge3);
+		h1.add(new JLabel("三角形面积"));
+		h2.add(trianglesize);
+		calt.addActionListener(this);
+		h2.add(calt);
+		trianglepanel.add(h1);
+		trianglepanel.add(h2);
+		mainpanel.add("1", cyclepanel);
+		mainpanel.add("2", trianglepanel);
+		mainpanel.setVisible(false);
+		add(mainpanel);
+		this.setTitle("计算面积");
+		setBounds(
+				(int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2 - 250,
+				(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2 - 125,500, 250);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == ch3) {
+			System.exit(0);
+		}
+		if (arg0.getSource() == ch1) {
+			mainpanel.setVisible(true);
+			card.first(mainpanel);
+
+		}
+		if (arg0.getSource() == ch2) {
+			mainpanel.setVisible(true);
+			card.last(mainpanel);
+		}
+		if (arg0.getSource() == calc) {
+			double r = Double.parseDouble(radius.getText());
+			ousize.setText(String.valueOf(Math.PI * r * r));
+		}
+		if (arg0.getSource() == calt) {
+			double e1 = Double.parseDouble(edge1.getText());
+			double e2 = Double.parseDouble(edge2.getText());
+			double e3 = Double.parseDouble(edge3.getText());
+			if (e1 + e2 > e3 && e1 + e3 > e2 && e2 + e3 > e1) {
+				double p = (e1 + e2 + e3) / 2.0;
+				trianglesize.setText(String.valueOf(Math.sqrt(p * (p - e1)
+						* (p - e2) * (p - e3))));
+			}
+			else trianglesize.setText("此非三角形也");
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Ex02_5();
+	}
+
+}

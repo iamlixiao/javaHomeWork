@@ -1,0 +1,106 @@
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.*;
+import static java.awt.BorderLayout.*;
+
+
+public class Ex02_2 extends JFrame implements ActionListener,ItemListener{
+
+	/**
+	 * @param args
+	 * 
+	 */
+	JTextField peopleamount=new JTextField(5);
+	String [] name= {"练习本每本5元","圆珠笔每支2元","数学课本每本15元","网络概论每本30元"};
+	int [] price= {5,2,15,30};
+	JCheckBox [] box= new JCheckBox[name.length];
+	
+	String [] name2={"无折扣","九折","八折","七折"};
+		double [] discount ={ 1.0 ,0.9,0.8,0.7};
+		JRadioButton [] jrb=new JRadioButton [name2.length];
+		JTextField jtf2=new JTextField(5);
+	public Ex02_2(){
+		JPanel jp1=new JPanel();
+		JLabel lb1=new JLabel("输入购物人数");
+		jp1.add(lb1);
+		jp1.add(peopleamount);
+		jp1.setLayout(new FlowLayout(FlowLayout.LEFT));
+		add(jp1,NORTH);
+		jp1.setBackground(Color.yellow);
+		JPanel jp2=new JPanel();
+		//jp2.setLayout(new GridLayout(2,1));
+		for(int i=0;i<box.length;i++){
+			box[i]=new JCheckBox(name[i]);
+			box[i].addActionListener(this);
+			jp2.add(box[i]);
+		}
+		JLabel lb2=new JLabel("总金额");
+		jp2.add(lb2);
+		
+		jtf2.setEditable(false);
+		jp2.add(jtf2);
+		
+		add(jp2,CENTER);
+		
+		
+		JPanel jp3=new JPanel();
+		for(int i=0;i<jrb.length;i++){
+			jrb[i]=new JRadioButton(name2[i]);
+			if (i==0)
+				jrb[i].setSelected(true);
+			jrb[i].addItemListener(this);
+			jp3.add(jrb[i]);
+		}
+		
+		ButtonGroup bg= new ButtonGroup();
+		for(int i=0;i<jrb.length;i++)
+			bg.add(jrb[i]);
+		add(jp3,SOUTH);
+		this.setTitle("购物计算");
+		//this.setLayout(new BorderLayout());
+		setBounds(100,100,300,200);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Ex02_2 ex02_2=new Ex02_2();
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		double totprice=0;
+		for(int i=0;i<box.length;i++)
+			if (box[i].isSelected())
+				totprice+=price[i];
+		totprice*=Integer.parseInt(peopleamount.getText());
+		for(int i=0;i<jrb.length;i++)
+			if (jrb[i].isSelected()){
+				totprice*=discount[i];
+				break;
+			}
+		
+		jtf2.setText(Double.toString(totprice));
+	}
+	@Override
+	public void itemStateChanged(ItemEvent arg0) {
+		double totprice=0;
+		for(int i=0;i<box.length;i++)
+			if (box[i].isSelected())
+				totprice+=price[i];
+		totprice*=Integer.parseInt(peopleamount.getText());
+		for(int i=0;i<jrb.length;i++)
+			if (jrb[i].isSelected()){
+				totprice*=discount[i];
+				break;
+			}
+		
+		jtf2.setText(Double.toString(totprice));
+			
+	}
+
+}

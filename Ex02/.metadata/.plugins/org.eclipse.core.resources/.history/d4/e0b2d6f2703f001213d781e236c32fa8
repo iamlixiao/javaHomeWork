@@ -1,0 +1,45 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+
+public class Ex02_4 extends JFrame implements ActionListener {
+	JButton button1,button2;
+	public Ex02_4(){
+		button1=new JButton("按钮1");
+		button2=new JButton("按钮2");
+		button1.setBounds(0, 0, 80, 30);
+		button2.setBounds(0, 80, 80, 30);
+		button1.addActionListener(this);
+		button2.addActionListener(this);
+		add(button1);
+		add(button2);
+		this.setTitle("移动的按钮");
+		setBounds(100,100,600,300);
+		this.setLayout(null);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+	int getrand(int a,int b){
+		int c=(int) ((b-a)*Math.random());
+		return a+c;
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource()==button1)
+			button2.setBounds(getrand(0,500),getrand(0,200),80,30);
+		else
+			button1.setBounds(getrand(0,500),getrand(0,200),80,30);
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

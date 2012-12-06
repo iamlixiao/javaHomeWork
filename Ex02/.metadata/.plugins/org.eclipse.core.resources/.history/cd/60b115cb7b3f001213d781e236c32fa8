@@ -1,0 +1,66 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+class Ex02_6 extends JFrame implements ActionListener {
+	JPanel panelw = new JPanel();
+	JPanel panele = new JPanel();
+	JLabel indinp=new JLabel("输入数字");
+	JTextField inumber = new JTextField(5);
+	JTextArea numberlist = new JTextArea();
+	JScrollPane leftpane = new JScrollPane(numberlist);
+
+	public Ex02_6() {
+		setBounds(100, 100, 500, 400);
+		panelw.setLayout(null);
+		panelw.setPreferredSize(new Dimension(getWidth()/2,50));
+		panelw.add(indinp);
+		indinp.setBounds(80, 155, 60, 25);
+		panelw.add(inumber);
+		panelw.setLayout(new FlowLayout(2));
+		inumber.addActionListener(this);
+		add(panelw, BorderLayout.WEST);
+		numberlist.setVisible(true);
+		numberlist.setLineWrap(true);
+		numberlist.setPreferredSize(new Dimension(getWidth() / 2, getHeight()-40));
+		leftpane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); 
+		panele.add(leftpane);
+		add(panele, BorderLayout.EAST);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == inumber) {
+			int x = Integer.parseInt(inumber.getText());
+			if (x <= 1000)
+				numberlist.append(inumber.getText() + "\n");
+			else {
+				int n = JOptionPane.showConfirmDialog(this, "把数加到文本区中?", "判断",
+						JOptionPane.YES_NO_OPTION);
+				if (n == JOptionPane.YES_OPTION)
+					numberlist.append(inumber.getText() + "\n");
+			}
+			inumber.setText("");
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Ex02_6();
+	}
+
+}

@@ -1,0 +1,231 @@
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+class MyDialog extends JDialog implements ActionListener {
+	JTextField searchfor = new JTextField(10);
+	JTextField replacewith = new JTextField(10);
+	JButton doreplace = new JButton("替换");
+	JButton doreplaceall = new JButton("全部替换");
+	String s1, s2;
+	JTextArea text;
+
+	MyDialog(JFrame o, String m, boolean b, JTextArea f) {
+		super(o, m, b);
+		setLayout(new FlowLayout());
+		this.setBounds(400, 300, 230, 130);
+		this.add(new JLabel("查找:"));
+
+		this.add(searchfor);
+		this.add(new JLabel("替换为:"));
+		this.add(replacewith);
+		this.add(doreplace);
+		this.add(doreplaceall);
+		doreplace.addActionListener(this);
+		doreplaceall.addActionListener(this);
+		text = f;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		s1 = searchfor.getText();
+		s2 = replacewith.getText();
+		String c;
+		if (arg0.getSource() == doreplace) {
+			c = text.getText().replaceFirst(s1, s2);
+			text.setText(c);
+		} else if (arg0.getSource() == doreplaceall) {
+			c = text.getText().replaceAll(s1, s2);
+			text.setText(c);
+			searchfor.setText("");
+			replacewith.setText("");
+		}
+	}
+}
+
+class MyNotepad extends JFrame implements ActionListener, KeyListener {
+	JMenuBar menubar = new JMenuBar();
+	JMenu filemenu = new JMenu("文件");
+	JMenu editmenu = new JMenu("编辑");
+	JMenuItem newfile = new JMenuItem("新建");
+	JMenuItem openfile = new JMenuItem("打开");
+	JMenuItem savefile = new JMenuItem("保存");
+	JMenuItem _exit = new JMenuItem("退出");
+	JMenuItem _cut = new JMenuItem("剪切");
+	JMenuItem _copy = new JMenuItem("复制");
+	JMenuItem _paste = new JMenuItem("粘贴");
+	JMenuItem dodelete=new JMenuItem("删除");
+	JMenuItem _find = new JMenuItem("查找");
+	JMenuItem _replace = new JMenuItem("替换");
+
+	JTextArea text = new JTextArea(29, 70);
+
+	String buffer = new String("");
+
+	void FIND() {
+		JOptionPane jop = new JOptionPane();
+		jop.setVisible(true);
+		String s = JOptionPane.showInputDialog(this, "输入查找内容", "查找",
+				JOptionPane.QUESTION_MESSAGE);
+		if (s != null) {
+
+			int now = text.getCaretPosition();
+			int p = text.getText().indexOf(s, now);
+			if (p != -1) {
+				text.setSelectionStart(p);
+				text.setSelectionEnd(p + s.length());
+			}
+
+		}
+	}
+
+	void createMenu() {
+		menubar.add(filemenu);
+		menubar.add(editmenu);
+		this.setJMenuBar(menubar);
+
+		filemenu.add(newfile);
+		filemenu.add(openfile);
+		filemenu.add(savefile);
+		filemenu.add(_exit);
+
+		editmenu.add(_cut);
+		editmenu.add(_copy);
+		editmenu.add(_paste);
+		editmenu.add(_find);
+		editmenu.add(_replace);
+	}
+
+	void createTextArea() {
+		text.setVisible(true);
+		text.setLineWrap(true);
+		GridLayout grid=new GridLayout(1,1);
+		GridBagConstraints c=new GridBagConstraints();
+		this.setLayout(grid);
+		c.fill=GridBagConstraints.BOTH;
+		JScrollPane textpane=new JScrollPane(text);
+		this.add(textpane);
+		text.addKeyListener(this);
+	}
+
+	void setFileFunction() {
+		_exit.addActionListener(this);
+		newfile.addActionListener(this);
+		openfile.addActionListener(this);
+		savefile.addActionListener(this);
+	}
+
+	void setEditFunction() {
+		_copy.addActionListener(this);
+		_paste.addActionListener(this);
+
+		_cut.addActionListener(this);
+
+		_find.addActionListener(this);
+
+		_replace.addActionListener(this);
+
+	}
+
+	void init() {
+		createMenu();
+		createTextArea();
+		setFileFunction();
+		setEditFunction();
+	}
+
+	public MyNotepad() {
+
+		init();
+		this.setTitle("记事本");
+		setBounds(200, 100, 800, 600);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		if (arg0.getModifiers() == InputEvent.CTRL_MASK
+				&& arg0.getKeyCode() == KeyEvent.VK_F)
+			FIND();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == _exit) {
+			System.exit(0);
+		}
+
+		if (arg0.getSource() == _copy) {
+			text.copy();
+		}
+
+		if (arg0.getSource() == _cut) {
+			text.cut();
+		}
+		if (arg0.getSource() == _paste) {
+			text.paste();
+		}
+
+		if (arg0.getSource() == _find) {
+			FIND();
+		}
+
+		if (arg0.getSource() == _replace) {
+			MyDialog dialog = new MyDialog(this, "替换", false, text);
+			dialog.setVisible(true);
+
+		}
+		if (arg0.getSource() == openfile) {
+			JFileChooser jfc = new JFileChooser();
+			int state = jfc.showOpenDialog(this);
+		}
+		if (arg0.getSource() == savefile) {
+			JFileChooser jfc = new JFileChooser();
+			int state = jfc.showSaveDialog(this);
+		}
+		if (arg0.getSource() == newfile) {
+			text.setText("");
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new MyNotepad();
+	}
+
+}

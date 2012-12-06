@@ -1,0 +1,7 @@
+INDEX VERSION 1.126+/home/lixiao/pgm/javaHomeWork/Ex02/.metadata/.plugins/org.eclipse.jdt.core
+1920065063.index
+2625617675.index
+3950546845.index
+2601679634.index
+3960818564.index
+91680433.index
