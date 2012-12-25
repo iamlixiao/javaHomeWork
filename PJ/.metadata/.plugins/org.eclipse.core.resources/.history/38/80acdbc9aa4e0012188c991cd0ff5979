@@ -27,7 +27,7 @@ public abstract class Collection {
 	
 	abstract Image getImg(String s);
 	
-	abstract Image getImg(int s);
+	abstract Image getImg(int i);
 
 	abstract Vector<String> listImages();
 

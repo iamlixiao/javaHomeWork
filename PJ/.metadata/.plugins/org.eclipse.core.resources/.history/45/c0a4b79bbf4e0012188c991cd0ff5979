@@ -1,0 +1,25 @@
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ * 
+ */
+public class CollectionServer implements Runnable {
+	CollectionServer(Collection c) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

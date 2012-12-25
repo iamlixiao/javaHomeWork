@@ -1,0 +1,125 @@
+import java.io.File;
+import java.util.HashMap;
+import java.util.Vector;
+
+/**
+ * 基础类，用于存储文件目录信息。很多该对象会组成一个树状结构，目前应用于本地文件系统。
+ */
+
+/**
+ * @author lixiao
+ * 
+ */
+
+public class ImageCollection {
+	File destine;
+	String path;
+	boolean inited;
+	ImageCollection parent;
+	HashMap<String, ImageCollection> subcollections;
+	Vector<String> subcollnames;
+	HashMap<String, File> images;
+	Vector<String> imagenames;
+
+	ImageCollection(String l) {
+		destine = new File(l);
+		path = l;
+		inited = false;
+		parent = null;
+		subcollections = new HashMap<String, ImageCollection>();
+		subcollnames = new Vector<String>();
+		images = new HashMap<String, File>();
+		imagenames = new Vector<String>();
+	}
+
+	ImageCollection(String l, ImageCollection p) {
+		destine = new File(l);
+		path = l;
+		inited = false;
+		parent = p;
+		subcollections = new HashMap<String, ImageCollection>();
+		subcollnames = new Vector<String>();
+		images = new HashMap<String, File>();
+		imagenames = new Vector<String>();
+	}
+
+	HashMap<String, File> getImages() {
+		return images;
+	}
+
+	Vector<String> listImages() {
+		return imagenames;
+	}
+
+	void init() {
+		if (parent == null)
+			parent = new ImageCollection(destine.getParent());
+		if (destine.isDirectory()) {
+			File[] contents = destine.listFiles();
+			for (File i : contents) {
+				String n = i.getName(), ln = n.toLowerCase();
+				if (i.isDirectory()) {
+					subcollections.put(n,
+							new ImageCollection(i.getPath(), this));
+					subcollnames.add(n);
+				} else if (ln.indexOf(".jpg") == ln.length() - 4
+						|| ln.indexOf(".bmp") == ln.length() - 4) {
+					images.put(n, i);
+					imagenames.add(n);
+				}
+			}
+		}
+		inited = true;
+	}
+
+	void uninit() {
+		subcollections.clear();
+		subcollnames.clear();
+		images.clear();
+		imagenames.clear();
+		inited = false;
+	}
+
+	ImageCollection getParent() {
+		return parent;
+	}
+
+	ImageCollection getParentu() {
+		subcollections.clear();
+		subcollnames.clear();
+		images.clear();
+		imagenames.clear();
+		inited = false;
+		return parent;
+	}
+
+	ImageCollection getSubu(String s) {
+		ImageCollection c = subcollections.get(s);
+		subcollections.clear();
+		subcollnames.clear();
+		images.clear();
+		imagenames.clear();
+		inited = false;
+		return c;
+	}
+
+	HashMap<String, ImageCollection> getSubColl() {
+		return subcollections;
+	}
+
+	Vector<String> listSubColl() {
+		return subcollnames;
+	}
+
+	boolean isInited() {
+		return inited;
+	}
+
+	int length() {
+		return images.size()+subcollnames.size();
+	}
+
+	String getPath() {
+		return path;
+	}
+}

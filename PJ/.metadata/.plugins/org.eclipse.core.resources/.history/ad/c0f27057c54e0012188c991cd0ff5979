@@ -1,0 +1,44 @@
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ * 
+ */
+public class CollectionServer implements Runnable {
+	RemoteCollection seed;
+	boolean isUndead;
+	CollectionServer(Collection c) {
+		seed = new RemoteCollection(c);
+		isUndead=true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		ServerSocket server;
+		CollectionServerThread thread;
+		Socket client;
+		try {
+			server=new ServerSocket(12345);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		while(isUndead){
+			
+		}
+	}
+
+}

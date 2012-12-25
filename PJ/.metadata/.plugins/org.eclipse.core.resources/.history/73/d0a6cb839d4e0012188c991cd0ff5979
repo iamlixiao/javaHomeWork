@@ -12,13 +12,13 @@ import javax.imageio.ImageIO;
 
 /**
  * @author lixiao
- * 
+ *
  */
 public class LDCollection extends Collection {
 	File destine;
 	String path;
 	boolean inited;
-	Collection parent;
+	LDCollection parent;
 	HashMap<String, Collection> subcollections;
 	Vector<String> subcollnames;
 	HashMap<String, File> images;
@@ -46,25 +46,21 @@ public class LDCollection extends Collection {
 		imagenames = new Vector<String>();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#init()
 	 */
 	@Override
 	void init() {
 		// TODO Auto-generated method stub
-		if (parent == null) {
-			String l = destine.getParent();
-			if (l != null)
-				parent = new LDCollection(destine.getParent());
-		}
+		if (parent == null)
+			parent = new LDCollection(destine.getParent());
 		if (destine.isDirectory()) {
 			File[] contents = destine.listFiles();
 			for (File i : contents) {
 				String n = i.getName(), ln = n.toLowerCase();
 				if (i.isDirectory()) {
-					subcollections.put(n, new LDCollection(i.getPath(), this));
+					subcollections.put(n,
+							new LDCollection(i.getPath(), this));
 					subcollnames.add(n);
 				} else if (ln.indexOf(".jpg") == ln.length() - 4
 						|| ln.indexOf(".bmp") == ln.length() - 4) {
@@ -74,11 +70,10 @@ public class LDCollection extends Collection {
 			}
 		}
 		inited = true;
+
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#uninit()
 	 */
 	@Override
@@ -92,9 +87,7 @@ public class LDCollection extends Collection {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#isInited()
 	 */
 	@Override
@@ -103,20 +96,16 @@ public class LDCollection extends Collection {
 		return inited;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#length()
 	 */
 	@Override
 	int length() {
 		// TODO Auto-generated method stub
-		return images.size() + subcollnames.size();
+		return images.size()+subcollnames.size();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getImages()
 	 */
 	@Override
@@ -125,9 +114,7 @@ public class LDCollection extends Collection {
 		return images;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getImage(java.lang.String)
 	 */
 	@Override
@@ -147,20 +134,7 @@ public class LDCollection extends Collection {
 		}
 	}
 
-	@Override
-	Image getImg(int s) {
-		// TODO Auto-generated method stub
-		try {
-			return ImageIO.read(images.get(imagenames.elementAt(s)));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			return null;
-		}
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#listImages()
 	 */
 	@Override
@@ -169,9 +143,7 @@ public class LDCollection extends Collection {
 		return imagenames;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getSubs()
 	 */
 	@Override
@@ -180,9 +152,7 @@ public class LDCollection extends Collection {
 		return subcollections;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getSub(java.lang.String)
 	 */
 	@Override
@@ -191,9 +161,7 @@ public class LDCollection extends Collection {
 		return subcollections.get(s);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getSubu(java.lang.String)
 	 */
 	@Override
@@ -208,9 +176,7 @@ public class LDCollection extends Collection {
 		return c;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#listSubs()
 	 */
 	@Override
@@ -219,9 +185,7 @@ public class LDCollection extends Collection {
 		return subcollnames;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getParent()
 	 */
 	@Override
@@ -230,28 +194,21 @@ public class LDCollection extends Collection {
 		return parent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getParentu()
 	 */
 	@Override
 	Collection getParentu() {
 		// TODO Auto-generated method stub
-		if (parent != null) {
-			subcollections.clear();
-			subcollnames.clear();
-			images.clear();
-			imagenames.clear();
-			inited = false;
-			return parent;
-		} else
-			return this;
+		subcollections.clear();
+		subcollnames.clear();
+		images.clear();
+		imagenames.clear();
+		inited = false;
+		return parent;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see Collection#getPath()
 	 */
 	@Override

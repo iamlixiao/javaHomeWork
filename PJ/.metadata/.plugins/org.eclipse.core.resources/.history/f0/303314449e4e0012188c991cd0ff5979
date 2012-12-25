@@ -18,7 +18,7 @@ public class LDCollection extends Collection {
 	File destine;
 	String path;
 	boolean inited;
-	Collection parent;
+	LDCollection parent;
 	HashMap<String, Collection> subcollections;
 	Vector<String> subcollnames;
 	HashMap<String, File> images;
@@ -54,11 +54,8 @@ public class LDCollection extends Collection {
 	@Override
 	void init() {
 		// TODO Auto-generated method stub
-		if (parent == null) {
-			String l = destine.getParent();
-			if (l != null)
-				parent = new LDCollection(destine.getParent());
-		}
+		if (parent == null)
+			parent = new LDCollection(destine.getParent());
 		if (destine.isDirectory()) {
 			File[] contents = destine.listFiles();
 			for (File i : contents) {
@@ -74,6 +71,7 @@ public class LDCollection extends Collection {
 			}
 		}
 		inited = true;
+
 	}
 
 	/*
@@ -141,17 +139,6 @@ public class LDCollection extends Collection {
 		// TODO Auto-generated method stub
 		try {
 			return ImageIO.read(images.get(s));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			return null;
-		}
-	}
-
-	@Override
-	Image getImg(int s) {
-		// TODO Auto-generated method stub
-		try {
-			return ImageIO.read(images.get(imagenames.elementAt(s)));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			return null;

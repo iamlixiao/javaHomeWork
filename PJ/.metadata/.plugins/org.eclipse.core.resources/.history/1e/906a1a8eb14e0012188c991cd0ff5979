@@ -18,7 +18,7 @@ public class LDCollection extends Collection {
 	File destine;
 	String path;
 	boolean inited;
-	Collection parent;
+	LDCollection parent;
 	HashMap<String, Collection> subcollections;
 	Vector<String> subcollnames;
 	HashMap<String, File> images;
@@ -74,6 +74,7 @@ public class LDCollection extends Collection {
 			}
 		}
 		inited = true;
+
 	}
 
 	/*

@@ -1,0 +1,105 @@
+import java.awt.Image;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Vector;
+
+
+public class RemoteCollection extends Collection {
+
+	@Override
+	void init() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	void uninit() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	boolean isInited() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	int length() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	HashMap<String, File> getImages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	File getImage(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Image getImg(int s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Image getImg(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Vector<String> listImages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	HashMap<String, Collection> getSubs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Collection getSub(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Collection getSubu(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Vector<String> listSubs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Collection getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	Collection getParentu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	String getPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

@@ -9,7 +9,6 @@ INDEX VERSION 1.126+/home/lixiao/pgm/javaHomeWork/PJ/.metadata/.plugins/org.ecli
 2785652409.index
 282040926.index
 698667905.index
-756995462.index
 1593792608.index
 1874780019.index
 3142107428.index
