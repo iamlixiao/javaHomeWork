@@ -1,0 +1,50 @@
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+public class ThumbButton extends JButton implements Runnable {
+
+	File image;
+	String path, file;
+
+	public ThumbButton(String text, String p) {
+		super(text, new ImageIcon("nuli.jpg"));
+		path = p;
+		setLayout(new FlowLayout());
+	}
+
+	String getPath() {
+		return path;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		Image img;
+		BufferedImage _img;
+		try {
+			img = ImageIO.read(new File(path));
+			_img = new BufferedImage(img.getWidth(this) * 72
+					/ img.getHeight(this), 72, BufferedImage.TYPE_INT_ARGB);
+			_img.getGraphics().drawImage(img, 0, 0, _img.getWidth(),
+					_img.getHeight(), this);
+			ImageIcon ico = new ImageIcon(_img);
+			setIcon(ico);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return;
+	}
+
+}

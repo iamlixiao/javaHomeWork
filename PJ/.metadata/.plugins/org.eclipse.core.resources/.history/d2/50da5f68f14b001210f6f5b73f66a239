@@ -1,0 +1,56 @@
+import java.awt.Image;
+import java.io.File;
+
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+public class ThumbButton extends JButton implements Runnable {
+
+	File image;
+	String path,file;
+
+	public ThumbButton() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(Icon icon) {
+		super(icon);
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(String text) {
+		super(text);
+
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(Action a) {
+		super(a);
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(String text, Icon icon) {
+		super(text, icon);
+
+		// TODO Auto-generated constructor stub
+	}
+	public ThumbButton(String text,File i){
+		super(text);
+		image=i;
+	}
+	public ThumbButton(String text,String p){
+		super(text);
+		path=p;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		ImageIcon ico=new ImageIcon(path+'/'+getText());
+		System.out.println(path+getText());
+		setIcon(ico);
+	}
+
+}

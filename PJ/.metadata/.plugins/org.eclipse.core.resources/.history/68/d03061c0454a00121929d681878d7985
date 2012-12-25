@@ -1,0 +1,37 @@
+import java.io.File;
+import java.util.HashMap;
+import java.util.Vector;
+
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ *
+ */
+
+public class ImageCollection {
+	File destine;
+	Vector<ImageCollection> subcollections;
+	Vector<String> subcollnames;
+	HashMap<String,File> images;
+	Vector<String> imagenames;
+	ImageCollection(String l){
+		destine=new File(l);
+		if(destine.isDirectory()){
+			File[] contents=destine.listFiles();
+			for(File i:contents){
+				String n=i.getName();
+				if(i.isDirectory()){
+					subcollections.add(new ImageCollection(i.getPath()));
+					subcollnames.add(n);
+				}
+				else if(n.indexOf(".jpg")!=-1){
+					images.put(n, i);
+					imagenames.add(n);
+				}
+			}
+		}
+	}
+}

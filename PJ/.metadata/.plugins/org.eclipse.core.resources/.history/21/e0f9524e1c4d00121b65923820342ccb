@@ -1,0 +1,41 @@
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+public class ThumbButton extends JButton implements Runnable {
+
+	File image;
+	String path, file;
+
+	public ThumbButton(String text, String p) {
+		super(text,new ImageIcon("nuli.jpg"));
+		path = p;
+	}
+
+	String getPath(){
+		return path;
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		Image img;
+		try {
+			img = ImageIO.read(new File(path));
+			img = img.getScaledInstance(-1, 72, Image.SCALE_FAST);
+			ImageIcon ico = new ImageIcon(img);
+			setIcon(ico);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return;
+	}
+
+}

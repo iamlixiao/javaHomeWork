@@ -1,0 +1,71 @@
+import java.awt.Graphics;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+public class ThumbButton extends JButton implements Runnable {
+
+	File image;
+	String path, file;
+	Image icon;
+
+	public ThumbButton() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(Icon icon) {
+		super(icon);
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(String text) {
+		super(text);
+
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(Action a) {
+		super(a);
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(String text, Icon icon) {
+		super(text, icon);
+
+		// TODO Auto-generated constructor stub
+	}
+
+	public ThumbButton(String text, File i) {
+		super(text);
+		image = i;
+	}
+
+	public ThumbButton(String text, String p) {
+		super(text);
+		path = p;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		Image img;
+		try {
+			System.out.println(image.getPath());
+			img = ImageIO.read(new File(image.getPath()));
+			icon=img.getScaledInstance(-1, 128,Image.SCALE_DEFAULT);
+//			ImageIcon ico = new ImageIcon(img);
+//			setIcon(ico);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return;
+	}
+
+}

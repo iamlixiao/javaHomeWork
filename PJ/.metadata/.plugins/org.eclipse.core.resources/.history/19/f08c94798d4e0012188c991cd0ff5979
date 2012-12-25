@@ -1,0 +1,141 @@
+import java.io.File;
+import java.util.HashMap;
+import java.util.Vector;
+
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ *
+ */
+public class LDCollection extends Collection {
+
+	/* (non-Javadoc)
+	 * @see Collection#init()
+	 */
+	@Override
+	void init() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#uninit()
+	 */
+	@Override
+	void uninit() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#isInited()
+	 */
+	@Override
+	boolean isInited() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#length()
+	 */
+	@Override
+	int length() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getImages()
+	 */
+	@Override
+	HashMap<String, File> getImages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getImage(java.lang.String)
+	 */
+	@Override
+	File getImage(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#listImages()
+	 */
+	@Override
+	Vector<String> listImages() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getSubs()
+	 */
+	@Override
+	HashMap<String, Collection> getSubs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getSub(java.lang.String)
+	 */
+	@Override
+	Collection getSub(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getSubu(java.lang.String)
+	 */
+	@Override
+	Collection getSubu(String s) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#listSubs()
+	 */
+	@Override
+	Vector<String> listSubs() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getParent()
+	 */
+	@Override
+	Collection getParent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getParentu()
+	 */
+	@Override
+	Collection getParentu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see Collection#getPath()
+	 */
+	@Override
+	String getPath() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

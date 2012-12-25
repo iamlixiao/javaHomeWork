@@ -1,0 +1,86 @@
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Vector;
+
+import javax.imageio.ImageIO;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ * 
+ */
+public class ImageThumbView extends JPanel implements ActionListener, Runnable{
+	ImageCollection current;
+	JPanel panel;
+	JScrollPane mainsp;
+	HashMap<String,ThumbButton> entries;
+	HashMap<String,Thread> ct;
+	Box boxlayout;
+
+	ImageThumbView(String l) {
+		current = new ImageCollection(l);
+		current.init();
+		//FlowLayout mainlayout=new FlowLayout(java.awt.FlowLayout.LEFT,5,5);
+		boxlayout=Box.createVerticalBox();
+		setPreferredSize(new Dimension(200, 900));
+		entries = new HashMap<String,ThumbButton>();
+		ct=new HashMap<String,Thread>();
+		for (int i = 0; i < current.length(); i++) {
+			String currenttext = current.listImages().elementAt(i);
+			ThumbButton bt = new ThumbButton(currenttext,current.getPath()+'/'+currenttext);
+			bt.setPreferredSize(new Dimension(128, 128));
+			entries.put(currenttext,bt);
+			Thread th=new Thread(bt);
+			ct.put(currenttext, th);
+			boxlayout.add(bt);
+			th.start();
+		}
+		boxlayout.setPreferredSize(new Dimension(200,83*current.length()));
+		mainsp=new JScrollPane(boxlayout);
+		mainsp.setPreferredSize(new Dimension(200,500));
+		add(mainsp);
+		setPreferredSize(new Dimension(200,500));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		Image img;
+		for(int i=0;i<current.length();i++){
+			try{
+				img=ImageIO.read(current.getImages().get(current.listImages().elementAt(i)));
+				img=img.getScaledInstance(-1, 128, Image.SCALE_SMOOTH);
+				entries.get(i).setIcon(new ImageIcon(img));
+			}
+			catch(IOException e){
+				System.out.println(e);
+			}
+		}
+	}
+
+}
