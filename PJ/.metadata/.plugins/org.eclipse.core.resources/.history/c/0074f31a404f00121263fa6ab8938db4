@@ -1,0 +1,59 @@
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ * 
+ */
+public class CollectionServerThread extends Thread {
+	Socket socket;
+	ObjectOutputStream out;
+	DataInputStream in;
+	StringBuffer read;
+	Collection current;
+	boolean isUndead;
+
+	CollectionServerThread(Socket s, Collection c) {
+		socket = s;
+		current = c;
+		try {
+			out = new ObjectOutputStream(s.getOutputStream());
+			in = new DataInputStream(s.getInputStream());
+			out.writeObject(new RemoteCollection(c));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void run() {
+		while (isUndead) {
+			try {
+				char c = in.readChar();
+				if (c == '/') {
+					if (read.equals("..")) {
+						current = current.getParentu();
+						out.writeObject(new RemoteCollection(current));
+					} else {
+						current = current.getSubu(read.toString());
+						out.writeObject(new RemoteCollection(current));
+					}
+					read.setLength(0);
+				} else if (c == '\0') {
+					out.writeObject(current.getImg(read.toString()));
+					read.setLength(0);
+				} else
+					read.append(c);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}

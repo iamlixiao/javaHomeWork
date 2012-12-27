@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <typeInfoHistroy>
 <typeInfo handle="=pingpong/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;java.awt.event(ItemListener.class[ItemListener" modifiers="1537" timestamp="1350577777000"/>
-<typeInfo handle="=webfileoper0/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;java.lang(Runnable.class[Runnable" modifiers="1537" timestamp="1350577777000"/>
 <typeInfo handle="=pingpong/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;javax.swing(JFrame.class[JFrame" modifiers="33" timestamp="1350577777000"/>
 <typeInfo handle="=ImageMan/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;javax.swing(JButton.class[JButton" modifiers="33" timestamp="1350577777000"/>
 <typeInfo handle="=ImageLoadTest/\/home\/lixiao\/bin\/jdk1.7.0_10\/jre\/lib\/rt.jar&lt;javax.swing(JFrame.class[JFrame" modifiers="33" timestamp="1354104601000"/>
 <typeInfo handle="=ImageMan/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;javax.swing(JPanel.class[JPanel" modifiers="33" timestamp="1350577777000"/>
 <typeInfo handle="=pingpong/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;java.awt.event(ActionListener.class[ActionListener" modifiers="1537" timestamp="1350577777000"/>
-<typeInfo handle="=ImageMan/src&lt;{Collection.java[Collection" modifiers="1025" timestamp="1356427189000"/>
+<typeInfo handle="=ImageMan/src&lt;{Collection.java[Collection" modifiers="1025" timestamp="1356510236000"/>
+<typeInfo handle="=webfileoper0/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;java.lang(Runnable.class[Runnable" modifiers="1537" timestamp="1350577777000"/>
+<typeInfo handle="=ImageMan/\/usr\/lib\/jvm\/java-7-openjdk\/jre\/lib\/rt.jar&lt;java.lang(Thread.class[Thread" modifiers="33" timestamp="1350577777000"/>
 </typeInfoHistroy>

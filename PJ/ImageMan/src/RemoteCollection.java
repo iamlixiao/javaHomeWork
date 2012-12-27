@@ -1,8 +1,10 @@
 import java.awt.Image;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -10,56 +12,52 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
+
 public class RemoteCollection extends Collection {
 	File target;
-	String targetPath;
+	String targetPath, server;
 	boolean inited;
-	Collection mirror;
+	Collection mirror, parent;
 	HashMap<String, Collection> subs;
 	Vector<String> subNames;
 	HashMap<String, File> images;
 	Vector<String> imageNames;
-	int length;
-
-	Socket socket;
-	ObjectInputStream in;
-	OutputStream out;
+	int length, serverPort;
 
 	RemoteCollection(Collection c) {
 		mirror = c;
+		targetPath = c.getPath();
 		inited = false;
 		subNames = c.listSubs();
 		imageNames = c.listImages();
 		length = c.length();
-		socket = new Socket();
+		server = "127.0.0.1";
+		serverPort = 12345;
 	}
 
 	@Override
 	void init() {
 		// TODO Auto-generated method stub
-		if (!socket.isConnected()) {
-			try {
-				InetAddress addr = InetAddress.getByName("127.0.0.1");
-				InetSocketAddress saddr = new InetSocketAddress(addr, 12345);
-				socket.connect(saddr);
-				in = new ObjectInputStream(socket.getInputStream());
-				out = socket.getOutputStream();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		Socket socket = new Socket();
+		try {
+			InetAddress addr = InetAddress.getByName(server);
+			InetSocketAddress saddr = new InetSocketAddress(addr, serverPort);
+			socket.connect(saddr);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
-
-	@Override
-	void uninit() {
-		// TODO Auto-generated method stub
 		try {
 			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	void uninit() {
 	}
 
 	@Override
@@ -86,15 +84,33 @@ public class RemoteCollection extends Collection {
 		return null;
 	}
 
+	/*
+	 * 读取远程图片 在服务器端利用ImageIO通过流将图片编码并发送，在客户端用ImageIO接收并解码
+	 * 
+	 * @see Collection#getImg(int)
+	 */
 	@Override
 	Image getImg(int s) {
-		// TODO Auto-generated method stub
+		Socket socket = socketUp();
+		ObjectInputStream in;
+		DataOutputStream out;
 		try {
-			out.write(imageNames.elementAt(s).getBytes());
-			return (Image) in.readObject();
-		} catch (ClassNotFoundException e) {
+			in = new ObjectInputStream(socket.getInputStream());
+			out = new DataOutputStream(socket.getOutputStream());
+			if (targetPath.lastIndexOf('/') != targetPath.length())
+				out.writeChars(targetPath + '/' + imageNames.elementAt(s));
+			else
+				out.writeChars(targetPath + imageNames.elementAt(s));
+			out.writeChar(0);
+			Image c = ImageIO.read(socket.getInputStream());
+			socket.close();
+			return c;
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		try {
+			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -104,14 +120,27 @@ public class RemoteCollection extends Collection {
 
 	@Override
 	Image getImg(String s) {
-		// TODO Auto-generated method stub
+		Socket socket = socketUp();
+		ObjectInputStream in;
+		DataOutputStream out;
 		try {
-			out.write(s.getBytes());
-			return (Image) in.readObject();
+			in = new ObjectInputStream(socket.getInputStream());
+			out = new DataOutputStream(socket.getOutputStream());
+			if (targetPath.lastIndexOf('/') != targetPath.length())
+				out.writeChars(targetPath + '/' + s);
+			else
+				out.writeChars(targetPath + s);
+			out.writeChar(0);
+			Image c = ImageIO.read(socket.getInputStream());
+			socket.close();
+			return c;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+		}
+		try {
+			socket.close();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -137,15 +166,43 @@ public class RemoteCollection extends Collection {
 	}
 
 	@Override
-	Collection getSubu(String s) {
-		// TODO Auto-generated method stub
+	Collection getSubu(String str) {
+		Socket s = socketUp();
+		ObjectInputStream in;
+		DataOutputStream out;
+		try {
+			in = new ObjectInputStream(s.getInputStream());
+			out = new DataOutputStream(s.getOutputStream());
+			if (targetPath.lastIndexOf('/') != targetPath.length())
+				out.writeChars(targetPath + '/' + str + '/');
+			else
+				out.writeChars(targetPath + str + '/');
+			out.writeChar(0);
+			RemoteCollection c = (RemoteCollection) in.readObject();
+			c.setParent(parent);
+			s.close();
+			c.setServer(server, serverPort);
+			return c;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			s.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	Vector<String> listSubs() {
 		// TODO Auto-generated method stub
-		return null;
+		return subNames;
 	}
 
 	@Override
@@ -156,14 +213,67 @@ public class RemoteCollection extends Collection {
 
 	@Override
 	Collection getParentu() {
-		// TODO Auto-generated method stub
+		Socket s = socketUp();
+		ObjectInputStream in;
+		DataOutputStream out;
+		try {
+			in = new ObjectInputStream(s.getInputStream());
+			out = new DataOutputStream(s.getOutputStream());
+			String t = targetPath.substring(0, targetPath.length() - 1);
+			out.writeChars(t.substring(0, t.lastIndexOf('/') + 1));
+			out.writeChar(0);
+			RemoteCollection c = (RemoteCollection) in.readObject();
+			s.close();
+			c.setServer(server, serverPort);
+			return c;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			s.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
 	String getPath() {
 		// TODO Auto-generated method stub
-		return null;
+		return targetPath;
 	}
 
+	@Override
+	void setParent(Collection p) {
+		// TODO Auto-generated method stub
+		parent = p;
+	}
+
+	void setServer(String s, int p) {
+		server = s;
+		serverPort = p;
+	}
+
+	Socket socketUp() {
+		Socket socket = new Socket();
+		InetAddress addr;
+		try {
+			addr = InetAddress.getByName(server);
+			InetSocketAddress saddr = new InetSocketAddress(addr, serverPort);
+			socket.connect(saddr);
+			return socket;
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 }

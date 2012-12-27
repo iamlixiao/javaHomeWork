@@ -59,6 +59,7 @@ public class LDCollection extends Collection {
 			if (l != null)
 				parent = new LDCollection(destine.getParent());
 		}
+		uninit();
 		if (destine.isDirectory()) {
 			File[] contents = destine.listFiles();
 			for (File i : contents) {
@@ -67,7 +68,11 @@ public class LDCollection extends Collection {
 					subcollections.put(n, new LDCollection(i.getPath(), this));
 					subcollnames.add(n);
 				} else if (ln.indexOf(".jpg") == ln.length() - 4
-						|| ln.indexOf(".bmp") == ln.length() - 4) {
+						|| ln.indexOf(".bmp") == ln.length() - 4
+						|| ln.indexOf(".png") == ln.length() - 4
+						|| ln.indexOf(".wbmp") == ln.length() - 5
+						|| ln.indexOf(".jpeg") == ln.length() - 5
+						|| ln.indexOf(".gif") == ln.length() - 4) {
 					images.put(n, i);
 					imagenames.add(n);
 				}
@@ -140,7 +145,7 @@ public class LDCollection extends Collection {
 	Image getImg(String s) {
 		// TODO Auto-generated method stub
 		try {
-			return ImageIO.read(images.get(s));
+			return (Image) ImageIO.read(images.get(s));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			return null;
@@ -199,6 +204,7 @@ public class LDCollection extends Collection {
 	@Override
 	Collection getSubu(String s) {
 		// TODO Auto-generated method stub
+		System.out.println("进入" + s);
 		Collection c = subcollections.get(s);
 		subcollections.clear();
 		subcollnames.clear();
@@ -238,6 +244,7 @@ public class LDCollection extends Collection {
 	@Override
 	Collection getParentu() {
 		// TODO Auto-generated method stub
+		System.out.println("离开");
 		if (parent != null) {
 			subcollections.clear();
 			subcollnames.clear();
@@ -258,6 +265,12 @@ public class LDCollection extends Collection {
 	String getPath() {
 		// TODO Auto-generated method stub
 		return path;
+	}
+
+	@Override
+	void setParent(Collection p) {
+		// TODO Auto-generated method stub
+		parent = p;
 	}
 
 }

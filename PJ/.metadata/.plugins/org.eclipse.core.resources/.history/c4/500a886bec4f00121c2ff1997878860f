@@ -1,0 +1,67 @@
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Vector;
+
+/**
+ * 
+ */
+
+/**
+ * @author lixiao
+ * 
+ */
+public class CollectionServer extends Thread {
+	Collection working;
+	Vector<CollectionServerThread> serverThreads;
+	boolean isUndead;
+
+	CollectionServer(Collection c) {
+		working = c;
+		isUndead = true;
+	}
+
+	void die() {
+		isUndead = false;
+	}
+
+	boolean isDead() {
+		return !isUndead;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		ServerSocket server;
+		CollectionServerThread thread;
+		Socket client;
+		System.out.println("Server up");
+		try {
+			server = new ServerSocket(12345);
+			while (isUndead) {
+				try {
+					client = server.accept();
+					thread = new CollectionServerThread(client, working);
+					thread.start();
+					serverThreads.add(thread);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			for (CollectionServerThread s : serverThreads) {
+				s.die();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			ManWindow.msg("无法使用服务器端口");
+		}
+	}
+
+}
