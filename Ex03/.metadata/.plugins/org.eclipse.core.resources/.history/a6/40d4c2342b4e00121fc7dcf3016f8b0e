@@ -1,0 +1,44 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import sun.jdbc.*;
+
+import javax.swing.JFrame;
+
+class Lab_db extends JFrame implements ActionListener {
+	Lab_db(Statement s) {
+		setBounds(10,10,100,100);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		Connection con;
+		Statement sql;
+		ResultSet rs;
+		try {
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		}
+		try{
+			con=DriverManager.getConnection("jdbc:postgresql:localhost", "stu1", "ok");
+			sql=con.createStatement();
+			new Lab_db(sql);
+		}catch(SQLException e){
+			System.out.println(e);
+		}
+	}
+
+}

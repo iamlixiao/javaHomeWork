@@ -1,0 +1,110 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+class Controller extends Thread {
+	JLabel controllee;
+	int interval, speed, terminal;
+
+	Controller(JLabel l, int ms, int s, int d) {
+		controllee = l;
+		interval = ms;
+		speed = s;
+		terminal = d;
+	}
+
+	public void run() {
+		while (controllee.getIcon().getIconWidth()
+				+ controllee.getBounds().getX() < terminal) {
+			controllee.setBounds((int) controllee.getBounds().getX() + speed,
+					(int) controllee.getBounds().getY(), (int) controllee
+							.getBounds().getWidth(), (int) controllee
+							.getBounds().getHeight());
+		}
+	}
+}
+
+class Lab_play extends JFrame implements ActionListener, Runnable {
+	JLabel ttl, rbt;
+	JButton stt;
+	Thread rabbit, turtle;
+	int intervalr = 2000, intervalt = 300, speedr = 10, speedt = 2, dist = 900;
+
+	Lab_play() {
+		ttl = new JLabel();
+		ttl.setIcon(new ImageIcon("turtle.png"));
+		rbt = new JLabel();
+		rbt.setIcon(new ImageIcon("rabbit.png"));
+		JPanel main = new JPanel();
+		main.setLayout(null);
+		main.add(ttl);
+		main.add(rbt);
+		ttl.setBounds(250 - ttl.getIcon().getIconWidth(), 20, ttl.getIcon()
+				.getIconWidth(), ttl.getIcon().getIconHeight());
+		rbt.setBounds(250 - rbt.getIcon().getIconWidth(), 40 + ttl.getIcon()
+				.getIconHeight(), rbt.getIcon().getIconWidth(), rbt.getIcon()
+				.getIconHeight());
+		JPanel start = new JPanel(), end = new JPanel();
+		main.add(start);
+		main.add(end);
+		start.setBounds(250, 0, 2, 40 + ttl.getIcon().getIconHeight()
+				+ rbt.getIcon().getIconHeight());
+		start.setBackground(Color.BLACK);
+		end.setBounds(250 + dist, 0, 2, start.getHeight());
+		end.setBackground(Color.BLACK);
+		add(main, BorderLayout.CENTER);
+		setBounds(100, 100, 1200, 500);
+		stt = new JButton("开始比赛");
+		add(stt,BorderLayout.SOUTH);
+		setVisible(true);
+		rabbit=new Thread(this);
+		turtle=new Thread(this);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new Lab_play();
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		JLabel controllee = ttl;
+		int speed = speedt, interval = intervalt;
+		if (Thread.currentThread() == rabbit) {
+			controllee = rbt;
+			speed = speedr;
+			interval = intervalr;
+		}
+		while (controllee.getIcon().getIconWidth()
+				+ controllee.getBounds().getX() < dist + 250) {
+			controllee.setBounds((int) controllee.getBounds().getX() + speed,
+					(int) controllee.getBounds().getY(), (int) controllee
+							.getBounds().getWidth(), (int) controllee
+							.getBounds().getHeight());
+			try {
+				Thread.currentThread().sleep(interval);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+}

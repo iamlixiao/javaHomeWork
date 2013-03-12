@@ -1,0 +1,91 @@
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+class Server extends JFrame implements ActionListener, Runnable {
+	JTextArea chatBoard = new JTextArea();
+	JPanel chatInput = new JPanel();
+	JButton send = new JButton("·¢ËÍ");
+	JTextField textfield = new JTextField(30);
+	Socket socket;
+	ServerSocket server;
+	DataInputStream in;
+	DataOutputStream out;
+	Thread thread;
+
+	Server() {
+		this.setBounds(400, 100, 460, 400);
+		this.setTitle("Server");
+		this.add(new JScrollPane(chatBoard), BorderLayout.CENTER);
+		chatInput.add(textfield);
+		chatInput.add(send);
+		send.addActionListener(this);
+		this.add(chatInput, BorderLayout.SOUTH);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+
+		try {
+			server = new ServerSocket(4331);
+			try {
+				socket = server.accept();
+				in = new DataInputStream(socket.getInputStream());
+				out = new DataOutputStream(socket.getOutputStream());
+				thread = new Thread(this);
+				thread.start();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public void run() {
+		String s;
+		while (true) {
+			try {
+				s = in.readUTF();
+				chatBoard.append(s + "\n");
+			} catch (IOException e) {
+				return;
+			}
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == send) {
+			try {
+				out.writeUTF(textfield.getText());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Server();
+	}
+
+}

@@ -1,0 +1,46 @@
+import java.awt.BorderLayout;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+
+class ReadByURL extends JFrame {
+	JTextArea textarea = new JTextArea();
+
+	ReadByURL() {
+
+		this.setBounds(400, 100, 600, 600);
+		this.setLayout(new BorderLayout());
+		this.add(textarea, BorderLayout.CENTER);
+		this.setVisible(true);
+		try {
+			URL url = new URL("http", "10.12.8.18", "/java2/myprog.java");
+			try {
+				DataInputStream in = new DataInputStream(url.openStream());
+				int n;
+				byte b[] = new byte[256];
+				String s=in.readUTF();
+				textarea.setText(s);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		} catch (MalformedURLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new ReadByURL();
+	}
+
+}

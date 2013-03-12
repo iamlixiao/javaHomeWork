@@ -14,8 +14,8 @@
 	<section name="DialogBounds_SuperInterfaceSelectionDialog">
 		<item value="410" key="DIALOG_WIDTH"/>
 		<item value="0" key="DIALOG_Y_ORIGIN"/>
-		<item value="101" key="DIALOG_X_ORIGIN"/>
 		<item value="619" key="DIALOG_HEIGHT"/>
+		<item value="101" key="DIALOG_X_ORIGIN"/>
 		<item value="1|文泉驿正黑|8.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 	</section>
 	<section name="quick_assist_proposal_size">
@@ -27,8 +27,8 @@
 		<section name="DialogBoundsSettings">
 			<item value="602" key="DIALOG_WIDTH"/>
 			<item value="51" key="DIALOG_Y_ORIGIN"/>
-			<item value="504" key="DIALOG_HEIGHT"/>
 			<item value="383" key="DIALOG_X_ORIGIN"/>
+			<item value="504" key="DIALOG_HEIGHT"/>
 			<item value="1|文泉驿正黑|8.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		</section>
 	</section>
@@ -38,8 +38,8 @@
 		<section name="DialogBoundsSettings">
 			<item value="600" key="DIALOG_WIDTH"/>
 			<item value="7" key="DIALOG_Y_ORIGIN"/>
-			<item value="500" key="DIALOG_HEIGHT"/>
 			<item value="6" key="DIALOG_X_ORIGIN"/>
+			<item value="500" key="DIALOG_HEIGHT"/>
 			<item value="1|文泉驿正黑|8.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		</section>
 	</section>
@@ -54,6 +54,8 @@
 	</section>
 	<section name="JavaElementSearchActions">
 	</section>
+	<section name="RenameInformationPopup">
+	</section>
 	<section name="org.eclipse.ltk.ui.refactoring.settings">
 		<item value="1" key="updateSimilarElementsMatchStrategy"/>
 		<item value="false" key="updateTextualMatches"/>
@@ -61,9 +63,7 @@
 	</section>
 	<section name="NewClassWizardPage">
 		<item value="false" key="create_constructor"/>
-		<item value="false" key="create_main"/>
 		<item value="true" key="create_unimplemented"/>
-	</section>
-	<section name="RenameInformationPopup">
+		<item value="false" key="create_main"/>
 	</section>
 </section>

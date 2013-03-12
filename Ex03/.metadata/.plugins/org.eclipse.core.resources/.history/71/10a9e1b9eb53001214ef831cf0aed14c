@@ -1,0 +1,282 @@
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
+
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+class addDialog extends JDialog implements ActionListener {
+	JButton jb = new JButton("确定");
+	JButton jb2 = new JButton("取消");
+	int option;
+
+	addDialog(JFrame f, String s, boolean b, JTextField t1, JTextField t2,
+			JTextField t3, JTextField t4, JTextField t5, JTextField t6) {
+		super(f, s, b);
+		this.setLayout(new FlowLayout());
+		this.setBounds(60, 60, 350, 150);
+		this.add(new JLabel("书编号"));
+		this.add(t1);
+		this.add(new JLabel("书名"));
+		this.add(t2);
+		this.add(new JLabel("作者"));
+		this.add(t3);
+		this.add(new JLabel("出版社"));
+		this.add(t4);
+		this.add(new JLabel("分类"));
+		this.add(t5);
+		this.add(new JLabel("价格"));
+		this.add(t6);
+		this.add(jb);
+		this.add(jb2);
+		jb.addActionListener(this);
+		jb2.addActionListener(this);
+		this.setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		if (arg0.getSource() == jb)
+			option = 1;
+		else
+			option = 0;
+		this.setVisible(false);
+	}
+
+	public int getOption() {
+		return option;
+	}
+}
+
+class Lab_db extends JFrame implements ActionListener {
+	Connection con;
+	Statement sql;
+	ResultSet rs;
+	JMenuBar menubar = new JMenuBar();
+	JMenu menu = new JMenu("图书管理");
+	JMenuItem addData = new JMenuItem("添加");
+	JMenuItem editData = new JMenuItem("修改");
+	JMenuItem deleteData = new JMenuItem("删除");
+	JMenuItem queryData = new JMenuItem("查询");
+	JMenuItem countData = new JMenuItem("统计");
+	JTextField t1 = new JTextField(5);
+	JTextField t2 = new JTextField(5);
+	JTextField t3 = new JTextField(5);
+	JTextField t4 = new JTextField(5);
+	JTextField t5 = new JTextField(5);
+	JTextField t6 = new JTextField(5);
+	Object[] headers = { "编号", "书名", "作者", "出版社", "分类", "价格" };
+	Object[][] data = new Object[100][6];
+	CardLayout card=new CardLayout();
+	JTable table = new JTable(new Object[1][6], headers);
+	JScrollPane tablesp=new JScrollPane(table);
+
+	public Lab_db() {
+		try {
+			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		}
+		try {
+			con = DriverManager.getConnection("jdbc:odbc:bookinfo", "stu1",
+					"ok");
+			sql = con.createStatement();
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+		this.setJMenuBar(menubar);
+		menubar.add(menu);
+		menu.add(addData);
+		addData.addActionListener(this);
+		menu.add(editData);
+		editData.addActionListener(this);
+		menu.add(deleteData);
+		deleteData.addActionListener(this);
+		menu.add(queryData);
+		queryData.addActionListener(this);
+		menu.add(countData);
+		countData.addActionListener(this);
+		
+		JPanel mainPanel=new JPanel();
+		mainPanel.setLayout(card);
+		
+		mainPanel.add("s",tablesp);
+
+		JPanel dataOps=new JPanel();
+		Box b0=Box.createVerticalBox();
+		Box b1=Box.createHorizontalBox();
+		b1.add(new JLabel("书编号"));
+		b1.add(t1);
+		b0.add(b1);
+		Box b2=Box.createHorizontalBox();
+		b2.add(new JLabel("书名"));
+		b2.add(t2);
+		b0.add(b2);
+		Box b3=Box.createHorizontalBox();
+		b3.add(new JLabel("作者"));
+		b3.add(t3);
+		b0.add(b3);
+		Box b4=Box.createHorizontalBox();
+		b4.add(new JLabel("出版社"));
+		b4.add(t4);
+		b0.add(b4);
+		dataOps.add(new JLabel("分类"));
+		dataOps.add(t5);
+		dataOps.add(new JLabel("价格"));
+		dataOps.add(t6);
+		dataOps.add(b0);
+		mainPanel.add("t",dataOps);
+		card.last(mainPanel);
+		add(mainPanel,BorderLayout.CENTER);
+		update();
+		this.setTitle("图书信息管理");
+		setBounds(100, 100, 600, 300);
+		setVisible(true);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	void update() {
+
+		for (int i = 0; i < 100; i++)
+			for (int j = 0; j < 6; j++)
+				data[i][j] = "";
+		try {
+			rs = sql.executeQuery("SELECT * FROM bookinfo");
+			String ans = "";
+			String tmp = "";
+			int j = 0;
+			Vector<String[]>set=new Vector<String[]>();
+			while (rs.next()) {
+				String[] resultline=new String[6];
+				for (int i = 1; i <= 6; i++) {
+					if (i < 6)
+						resultline[i - 1] = rs.getString(i);
+					else {
+						resultline[i - 1] = String.valueOf(rs.getInt(6));
+					}
+				}
+				j++;
+				set.add(resultline);
+			}
+			String[][] dt=new String[set.size()][6];
+			int i=0;
+			for(String[] s:set){
+				dt[i]=s;
+				i++;
+			}
+			table = new JTable(dt, headers);
+			tablesp.setViewportView(table);
+		} catch (SQLException e) {
+			System.out.println(e);
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (arg0.getSource() == queryData) {
+			update();
+		}
+
+		if (arg0.getSource() == deleteData) {
+			String str = JOptionPane.showInputDialog(this, "输入要删除的书的编号", "删除",
+					JOptionPane.PLAIN_MESSAGE);
+			if (str != null) {
+				str = "DELETE  FROM bookinfo WHERE book_no='" + str + "'";
+				try {
+					sql.execute(str);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				update();
+			}
+		}
+
+		if (arg0.getSource() == addData) {
+
+			addDialog dialog = new addDialog(this, "添加", true, t1, t2, t3, t4,
+					t5, t6);
+			if (dialog.getOption() == 1) {
+				String str = "INSERT into bookinfo values ('" + t1.getText()
+						+ "','" + t2.getText() + "','" + t3.getText() + "','"
+						+ t4.getText() + "','" + t5.getText() + "',"
+						+ t6.getText() + ")";
+				System.out.println(str);
+				try {
+					sql.execute(str);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				update();
+			}
+		}
+
+		if (arg0.getSource() == editData) {
+			JTextField t1 = new JTextField(5);
+			JTextField t2 = new JTextField(5);
+			JTextField t3 = new JTextField(5);
+			JTextField t4 = new JTextField(5);
+			JTextField t5 = new JTextField(5);
+			JTextField t6 = new JTextField(5);
+			addDialog dialog = new addDialog(this, "修改(修改指定编号的书的信息)", true, t1,
+					t2, t3, t4, t5, t6);
+			if (dialog.getOption() == 1) {
+				String str = "UPDATE bookinfo set book_name='" + t2.getText()
+						+ "',book_author='" + t3.getText()
+						+ "',book_publisher='" + t4.getText()
+						+ "',book_class='" + t5.getText() + "',book_price="
+						+ t6.getText() + " where book_no='" + t1.getText()
+						+ "'";
+				try {
+					sql.execute(str);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				update();
+			}
+		}
+		if (arg0.getSource() == countData) {
+			String str = "SELECT COUNT(*) FROM bookinfo";
+			try {
+				rs = sql.executeQuery(str);
+				rs.next();
+				String ans = "一共有" + Integer.toString(rs.getInt(1)) + "本书！";
+				JOptionPane.showMessageDialog(this, ans, "统计",
+						JOptionPane.PLAIN_MESSAGE);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		new Lab_db();
+	}
+
+}

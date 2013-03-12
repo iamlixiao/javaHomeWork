@@ -1,0 +1,53 @@
+public class Ex03_7 implements Runnable {
+
+	Thread student1;
+	Thread student2;
+	Thread teacher;
+
+	public Ex03_7() {
+		student1 = new Thread(this);
+		student2 = new Thread(this);
+		teacher = new Thread(this);
+		student1.start();
+		student2.start();
+		teacher.start();
+	}
+
+	@Override
+	public void run() {
+		if (Thread.currentThread() == student1) {
+			try {
+				Thread.sleep(1000 * 60 * 10);
+			} catch (InterruptedException e) {
+				System.out.println("知道了！");
+			}
+			student2.interrupt();
+		}
+		if (Thread.currentThread() == student2) {
+			try {
+				Thread.sleep(1000 * 60 * 60);
+			} catch (InterruptedException e) {
+				System.out.println("我醒了！");
+			}
+		}
+		if (Thread.currentThread() == teacher) {
+			for (int i = 0; i < 3; i++) {
+				System.out.println("上课！");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+				}
+			}
+			student1.interrupt();
+		}
+	}
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new Ex03_7();
+	}
+
+}

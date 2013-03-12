@@ -1,0 +1,55 @@
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.RandomAccessFile;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+
+
+public class Ex03_4 extends JFrame implements ActionListener {
+
+	Object[] cname={"姓名","地址","电话"};
+	Object[][] data=new Object[100][3];
+	JMenuBar menubar=new JMenuBar();
+	JMenu menu=new JMenu("菜单选项");
+	JMenuItem item1=new JMenuItem("录入");
+	JMenuItem item2=new JMenuItem("显示");
+	CardLayout card=new CardLayout();
+	JPanel jp=new JPanel();
+	JPanel jp1=new JPanel();
+	JTextField t1=new JTextField(10);
+	JTextField t2=new JTextField(10);
+	JTextField t3=new JTextField(10);
+	JTable table=new JTable(data,cname);
+	JButton confirm = new JButton("录入");
+	RandomAccessFile raf=null;
+	
+	void createMenu(){
+		this.setJMenuBar(menubar);
+		menubar.add(menu);
+		menu.add(item1);
+		menu.add(item2);
+		item1.addActionListener(this);
+		item2.addActionListener(this);
+	}
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}
